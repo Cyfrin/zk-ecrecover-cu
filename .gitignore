@@ -1,0 +1,8 @@
+.vscode
+.env
+.DS_Store
+target/*
+*/DS_Store
+circuits/inputs.txt
+circuits/Prover.toml
+circuits/target

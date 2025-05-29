@@ -1,0 +1,7 @@
+[package]
+name = "circuits"
+type = "bin"
+authors = ["Ciara Nightingale"]
+
+[dependencies]
+ecrecover = { tag = "v0.30.0", git = "https://github.com/colinnielsen/ecrecover-noir" }
