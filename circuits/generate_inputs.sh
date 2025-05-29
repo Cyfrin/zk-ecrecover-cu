@@ -27,13 +27,13 @@ hex_to_dec_quoted_array() {
 }
 
 # Read values from file
-expectedAddress=$(extract_value expectedAddress)
+expected_address=$(extract_value expected_address)
 hashed_message=$(extract_value hashed_message)
 pub_key_x=$(extract_value pub_key_x)
 pub_key_y=$(extract_value pub_key_y)
 signature=$(extract_value signature)
 
-# Strip 0x from everything except expectedAddress
+# Strip 0x from everything except expected_address
 hashed_message=${hashed_message#0x}
 pub_key_x=${pub_key_x#0x}
 pub_key_y=${pub_key_y#0x}
@@ -50,7 +50,7 @@ signature_arr=$(hex_to_dec_quoted_array "$signature")
 
 # Write output
 cat > "$output_file" <<EOF
-expectedAddress = "$expectedAddress"
+expected_address = "$expected_address"
 hashed_message = $hashed_message_arr
 pub_key_x = $pub_key_x_arr
 pub_key_y = $pub_key_y_arr
