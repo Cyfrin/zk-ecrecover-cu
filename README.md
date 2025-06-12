@@ -9,7 +9,7 @@ This circuit verifies a signature without revealing the signing address.
 ### 1. Clone this repo
 
 ```bash
-git clone https://github.com/Cyfrin/zk-noir-simple-ecrecover.git
+git clone https://github.com/Cyfrin/zk-ecrecover-cu.git
 ```
 
 ### 2. Navigate inside the circuits folder
