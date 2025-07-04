@@ -28,7 +28,7 @@ hex_to_dec_quoted_array() {
 
         # Strict byte validation
         if [[ ! "$hexbyte" =~ ^[0-9a-fA-F]{2}$ ]]; then
-            echo "Error: '$hexbyte' no es un byte hexadecimal válido (índice $i del string '$hexstr')" >&2
+            echo "Error: '$hexbyte' is not a valid hexadecimal byte (index $i of the string '$hexstr')" >&2
             continue
         fi
 
@@ -55,7 +55,7 @@ signature=${signature#0x}
 # Validate signature length
 sig_len=${#signature}
 if (( sig_len < 130 )); then
-    echo "Error: longitud inválida de signature ($sig_len caracteres)" >&2
+    echo "Error: Invalid signature length ($sig_len characters)" >&2
     exit 1
 fi
 
