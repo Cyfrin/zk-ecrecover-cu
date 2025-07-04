@@ -17,7 +17,7 @@ hex_to_dec_quoted_array() {
     local len=${#hexstr}
     local arr=()
 
-    # Si la longitud es impar, agregamos un 0 al principio
+    # If the length is odd, we add a 0 at the beginning
     if (( len % 2 != 0 )); then
         hexstr="0$hexstr"
         len=${#hexstr}
@@ -26,7 +26,7 @@ hex_to_dec_quoted_array() {
     for (( i=0; i<len; i+=2 )); do
         local hexbyte="${hexstr:$i:2}"
 
-        # Validación estricta del byte
+        # Strict byte validation
         if [[ ! "$hexbyte" =~ ^[0-9a-fA-F]{2}$ ]]; then
             echo "Error: '$hexbyte' no es un byte hexadecimal válido (índice $i del string '$hexstr')" >&2
             continue
@@ -52,7 +52,7 @@ pub_key_x=${pub_key_x#0x}
 pub_key_y=${pub_key_y#0x}
 signature=${signature#0x}
 
-# Validar longitud de firma
+# Validate signature length
 sig_len=${#signature}
 if (( sig_len < 130 )); then
     echo "Error: longitud inválida de signature ($sig_len caracteres)" >&2
