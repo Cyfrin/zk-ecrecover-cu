@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 input_file="inputs.txt"
 output_file="Prover.toml"
@@ -6,8 +7,8 @@ output_file="Prover.toml"
 # Extract only the value inside quotes for a given key
 extract_value() {
     local key=$1
-    # Extract the part inside quotes after the equals sign
-    grep "^$key\s*=" "$input_file" | sed -E 's/^[^=]+= *"(.*)"/\1/'
+    local value=$(grep -E "^$key\s*=" "$input_file" | head -n 1 | cut -d '"' -f2)
+    echo "$value"
 }
 
 # Convert hex string (without 0x) to quoted decimal byte array
@@ -15,14 +16,26 @@ hex_to_dec_quoted_array() {
     local hexstr=$1
     local len=${#hexstr}
     local arr=()
+
+    # If the length is odd, we add a 0 at the beginning
+    if (( len % 2 != 0 )); then
+        hexstr="0$hexstr"
+        len=${#hexstr}
+    fi
+
     for (( i=0; i<len; i+=2 )); do
-        # Extract two hex digits
-        local hexbyte="${hexstr:i:2}"
-        # Convert hex to decimal number
+        local hexbyte="${hexstr:$i:2}"
+
+        # Strict byte validation
+        if [[ ! "$hexbyte" =~ ^[0-9a-fA-F]{2}$ ]]; then
+            echo "Error: '$hexbyte' is not a valid hexadecimal byte (index $i of the string '$hexstr')" >&2
+            continue
+        fi
+
         local dec=$((16#$hexbyte))
-        # Add decimal number as quoted string
         arr+=("\"$dec\"")
     done
+
     echo "["$(IFS=,; echo "${arr[*]}")"]"
 }
 
@@ -38,6 +51,13 @@ hashed_message=${hashed_message#0x}
 pub_key_x=${pub_key_x#0x}
 pub_key_y=${pub_key_y#0x}
 signature=${signature#0x}
+
+# Validate signature length
+sig_len=${#signature}
+if (( sig_len < 130 )); then
+    echo "Error: Invalid signature length ($sig_len characters)" >&2
+    exit 1
+fi
 
 # Strip last byte (2 hex chars) from signature to remove v
 signature=${signature:0:${#signature}-2}
